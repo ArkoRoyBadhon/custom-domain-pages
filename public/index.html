@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create File</title>
+</head>
+<body>
+    <h1>Create a File</h1>
+    <form id="fileForm">
+        <label for="subdomain">Subdomain:</label>
+        <input type="text" id="subdomain" name="subdomain" required><br><br>
+        
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content" rows="10" cols="30" required></textarea><br><br>
+        
+        <button type="submit">Create File</button>
+    </form>
+    
+    <p id="response"></p>
+
+    <script>
+        document.getElementById('fileForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const subdomain = document.getElementById('subdomain').value;
+            const content = document.getElementById('content').value;
+
+            fetch(`/create-file/${subdomain}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ content: content }),
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('response').textContent = data;
+            })
+            .catch(error => {
+                document.getElementById('response').textContent = 'Error: ' + error;
+            });
+        });
+    </script>
+</body>
+</html>
